@@ -1,12 +1,27 @@
 package com.sherry.SpringSecurity.controller;
 
+import com.sherry.SpringSecurity.model.Loans;
+import com.sherry.SpringSecurity.repository.LoanRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class LoansController {
-    @GetMapping("/loans")
-    public String getLoans() {
-        return "Here are the loans details";
+@RequiredArgsConstructor
+public class LoansController{
+    private final LoanRepository loanRepository;
+
+    @GetMapping("/myLoans")
+    public List<Loans> getLoanDetails(@RequestParam long id) {
+        List<Loans> loans = loanRepository.findByCustomerIdOrderByStartDtDesc(id);
+        if (loans != null) {
+            return loans;
+        } else {
+            return null;
+        }
     }
+
 }
